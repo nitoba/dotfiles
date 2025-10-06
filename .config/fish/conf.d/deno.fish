@@ -1,0 +1,1 @@
+source "/home/bruno-alves/.deno/env.fish"

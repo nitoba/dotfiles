@@ -1,0 +1,188 @@
+{
+  "javascript.suggest.autoImports": true,
+  "typescript.suggest.autoImports": true,
+  "workbench.iconTheme": "symbols",
+  "workbench.colorTheme": "Thanos : Infinity Dark - Contrast",
+  "workbench.editor.labelFormat": "short",
+  "workbench.colorCustomizations": {
+    "tab.activeBackground": "#483C67"
+  },
+  "workbench.layoutControl.enabled": false,
+  "editor.fontFamily": "JetBrainsMono Nerd Font",
+  "editor.fontSize": 14,
+  "editor.fontWeight": "400",
+  "editor.letterSpacing": 1.1,
+  "editor.lineHeight": 22,
+  "editor.fontLigatures": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "never",
+    "source.sortMembers": "explicit"
+  },
+  "editor.minimap.enabled": true,
+  "editor.scrollbar.horizontal": "hidden",
+  "editor.scrollbar.vertical": "hidden",
+  "editor.stickyScroll.enabled": true,
+  "editor.formatOnSave": true,
+  "editor.suggestSelection": "first",
+  "editor.semanticHighlighting.enabled": false,
+  "explorer.compactFolders": false,
+  "explorer.sortOrder": "foldersNestsFiles",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "package.json": ".eslint*, prettier*, tsconfig*, vite*, pnpm-lock*, bun.lock, nest-cli*",
+    "tailwind.config*": "tailwind.config*, postcss.config*",
+    ".env*": ".env*"
+  },
+  "breadcrumbs.enabled": false,
+  "window.commandCenter": false,
+  "apc.electron": {
+    "titleBarStyle": "hiddenInset"
+  },
+  "apc.header": {
+    "height": 36
+  },
+  "apc.activityBar": {
+    "position": "bottom",
+    "hideSettings": true,
+    "size": 48,
+    "itemMargin": 8,
+    "itemSize": 32
+  },
+  "apc.font.family": "Inter",
+  "apc.stylesheet": {
+    ".title-label > h2": "display: none",
+    ".editor-actions": "display: none",
+    ".nosidebar .inline-tabs-placeholder": "width: 75px",
+    ".pane-header": "padding: 0 8px",
+    ".pane-body": "padding: 8px",
+    ".split-view-view:first-child .pane-header": "display: none !important;",
+    ".monaco-list-row": "border-radius: 4px;",
+    ".monaco-workbench .monaco-list:not(.element-focused):focus:before": "display: none;"
+  },
+  "files.exclude": {
+    "**/*.g.dart": true,
+    "**/__pycache__": true
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "terminal.integrated.fontWeight": "normal",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontLigatures": true,
+  "cSpell.userWords": [
+    "agrotrace",
+    "aqui",
+    "brainid",
+    "Carregando",
+    "destinatario",
+    "destinatarios",
+    "dtos",
+    "Entrou",
+    "Fastify",
+    "langchain",
+    "Langchain",
+    "ollama",
+    "OPENAI",
+    "originalname",
+    "qdrant",
+    "tsyringe",
+    "typeorm",
+    "vaden",
+    "whatsapp"
+  ],
+  "terminal.integrated.profiles.linux": {
+    "bash": {
+      "path": "bash"
+    },
+    "zsh": {
+      "path": "zsh"
+    },
+    "fish": {
+      "path": "/usr/bin/fish"
+    },
+    "tmux": {
+      "path": "tmux",
+      "icon": "terminal-tmux"
+    },
+    "pwsh": {
+      "path": "pwsh",
+      "icon": "terminal-powershell"
+    }
+  },
+  "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
+  "terminal.integrated.defaultProfile.linux": "fish",
+  "terminal.integrated.env.osx": {
+    "FIG_NEW_SESSION": "1"
+  },
+  "tabnine.experimentalAutoImports": true,
+  "cSpell.enableFiletypes": ["dart"],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma",
+    "editor.formatOnSave": true
+  },
+  "liveServer.settings.donotVerifyTags": true,
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [80],
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  "security.workspace.trust.untrustedFiles": "open",
+  "symbols.hidesExplorerArrows": false,
+  "git.autofetch": true,
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.inlineSuggest.suppressSuggestions": true,
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(((?:[^()]|\\([^()]*\\))*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
+    ["cn\\(((?:[^()]|\\([^()]*\\))*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "cSpell.language": "en,pt,pt_BR",
+  "workbench.statusBar.visible": false,
+  "cody.debug.verbose": true,
+  "jupyter.interactiveWindow.textEditor.executeSelection": true,
+  "diffEditor.hideUnchangedRegions.enabled": true,
+  "explorer.confirmDelete": false,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "window.customTitleBarVisibility": "auto",
+  "database-client.autoSync": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "[css]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4o-mini",
+  "cody.suggestions.mode": "auto-edit",
+  "chat.mcp.discovery.enabled": true,
+  "git.enableSmartCommit": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "amp.url": "https://ampcode.com/",
+  "amp.mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    }
+  },
+  "python.defaultInterpreterPath": "/bin/python3",
+  "claude-code.selectedModel": "default"
+}
