@@ -2,7 +2,7 @@
   "javascript.suggest.autoImports": true,
   "typescript.suggest.autoImports": true,
   "workbench.iconTheme": "symbols",
-  "workbench.colorTheme": "Thanos : Infinity Dark - Contrast",
+  "workbench.colorTheme": "Catppuccin Mocha",
   "workbench.editor.labelFormat": "short",
   "workbench.colorCustomizations": {
     "tab.activeBackground": "#483C67"
@@ -86,6 +86,7 @@
     "OPENAI",
     "originalname",
     "qdrant",
+    "Sicar",
     "tsyringe",
     "typeorm",
     "vaden",
@@ -98,25 +99,21 @@
     "zsh": {
       "path": "zsh"
     },
-    "fish": {
-      "path": "/usr/bin/fish"
-    },
-    "tmux": {
-      "path": "tmux",
-      "icon": "terminal-tmux"
-    },
     "pwsh": {
       "path": "pwsh",
       "icon": "terminal-powershell"
+    },
+    "Fish VSCode": {
+      "path": "/usr/bin/fish",
+      "args": ["--login"],
+      "overrideName": true,
+      "icon": "terminal",
+      "color": "terminal.ansiBlue"
     }
   },
-  "terminal.integrated.defaultProfile.windows": "Ubuntu-20.04 (WSL)",
-  "terminal.integrated.defaultProfile.linux": "fish",
-  "terminal.integrated.env.osx": {
-    "FIG_NEW_SESSION": "1"
-  },
+  "terminal.integrated.defaultProfile.linux": "Fish VSCode",
+  "terminal.integrated.inheritEnv": true,
   "tabnine.experimentalAutoImports": true,
-  "cSpell.enableFiletypes": ["dart"],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma",
     "editor.formatOnSave": true
@@ -171,7 +168,12 @@
   "gitlens.ai.model": "vscode",
   "gitlens.ai.vscode.model": "copilot:gpt-4o-mini",
   "cody.suggestions.mode": "auto-edit",
-  "chat.mcp.discovery.enabled": true,
+  "chat.mcp.discovery.enabled": {
+    "claude-desktop": true,
+    "windsurf": true,
+    "cursor-global": true,
+    "cursor-workspace": true
+  },
   "git.enableSmartCommit": true,
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"
