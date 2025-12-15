@@ -9,8 +9,6 @@ if status is-interactive
     # ----------------------------------
     # Rust, .NET, Neovim, OpenCode
     set -Ua fish_user_paths $HOME/.cargo/bin
-    set -Ua fish_user_paths $HOME/.dotnet/tools
-    set -Ua fish_user_paths $HOME/.dotnet
     set -x PATH $PATH /opt/nvim-linux64/bin
     set -Ua fish_user_paths $HOME/.opencode/bin
 

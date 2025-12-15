@@ -34,4 +34,4 @@ SETUVAR fish_pager_color_description:yellow\x1e\x2di
 SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_pager_color_selected_background:\x2dr
-SETUVAR fish_user_paths:/home/bruno\x2dalves/\x2ecargo/bin\x1e/home/bruno\x2dalves/\x2edotnet/tools\x1e/home/bruno\x2dalves/\x2edotnet\x1e/home/bruno\x2dalves/\x2eopencode/bin
+SETUVAR fish_user_paths:/home/bruno\x2dalves/\x2ecargo/bin\x1e/home/bruno\x2dalves/\x2edotnet/tools\x1e/home/bruno\x2dalves/\x2edotnet\x1e/home/bruno\x2dalves/\x2eopencode/bin\x1e/home/nitoba/\x2ecargo/bin\x1e/home/nitoba/\x2edotnet/tools\x1e/home/nitoba/\x2edotnet\x1e/home/nitoba/\x2eopencode/bin
