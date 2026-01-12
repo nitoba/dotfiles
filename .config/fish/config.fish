@@ -59,9 +59,9 @@ if status is-interactive
     end
 
     # Aliases
-    alias tm 'task-master'
     alias ls 'eza -l --no-filesize --long --icons=always --tree --color=always --no-user --no-time --no-permissions --level=3 --git-ignore'
     alias cat 'batcat --color=always'
     alias cd 'z'
-
+    alias standup "cd /home/nitoba/.standup; ./standup-linux"
 end
+
