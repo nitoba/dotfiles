@@ -1,0 +1,55 @@
+---
+# ============================================
+# IBS Repositories Setup
+# ============================================
+# Playbook to clone IBS development repositories
+# from Azure DevOps to ~/Documents/repos/ibs
+
+- name: Clone IBS repositories
+  hosts: localhost
+  connection: local
+  become: false
+
+  vars:
+    ibs_repos_dir: "{{ ansible_env.HOME }}/Documents/repos/ibs"
+    ibs_repos:
+      - repo: "git@ssh.dev.azure.com:v3/ibsbiosistemico/AGROTRACE/agrotrace-v3"
+        dest: "{{ ibs_repos_dir }}/agrotrace-v3"
+      - repo: "git@ssh.dev.azure.com:v3/ibsbiosistemico/AGROTRACE/AGROTOOLS"
+        dest: "{{ ibs_repos_dir }}/AGROTOOLS"
+      - repo: "git@ssh.dev.azure.com:v3/ibsbiosistemico/CHECKMILK/CHECKMILK-FRONT"
+        dest: "{{ ibs_repos_dir }}/CHECKMILK-FRONT"
+      - repo: "git@ssh.dev.azure.com:v3/ibsbiosistemico/CHECKMILK/CHECKMILK-API"
+        dest: "{{ ibs_repos_dir }}/CHECKMILK-API"
+
+  tasks:
+    - name: Ensure IBS repositories directory exists
+      ansible.builtin.file:
+        path: "{{ ibs_repos_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Clone IBS repositories
+      ansible.builtin.git:
+        repo: "{{ item.repo }}"
+        dest: "{{ item.dest }}"
+        force: false
+      loop: "{{ ibs_repos }}"
+
+    - name: Clone PR repository using GitHub CLI
+      ansible.builtin.command:
+        cmd: gh repo clone nitoba/pr
+        chdir: "{{ ibs_repos_dir }}"
+        creates: "{{ ibs_repos_dir }}/pr"
+
+    - name: Run build script on PR repository
+      ansible.builtin.command:
+        cmd: bun run build
+        chdir: "{{ ibs_repos_dir }}/pr"
+
+    - name: Copy .env.example to .env
+      ansible.builtin.copy:
+        src: "{{ ibs_repos_dir }}/pr/.env.example"
+        dest: "{{ ibs_repos_dir }}/pr/.env"
+        remote_src: true
+        mode: "0644"
