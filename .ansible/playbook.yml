@@ -2,7 +2,6 @@
 - name: Configure Fedora Bluefin Development Environment
   hosts: localhost
   connection: local
-  # become is handled per-task, not globally
   vars:
     dotfiles_repo: "https://github.com/nitoba/dotfiles.git"
     dotfiles_branch: "bluefin"
@@ -30,6 +29,7 @@
       register: rpmfusion_result
       changed_when: rpmfusion_result.rc == 0
       failed_when: false
+      become: true
 
     # ============================================
     # Homebrew CLI Tools
@@ -55,6 +55,7 @@
       ansible.builtin.rpm_key:
         state: present
         key: https://packages.microsoft.com/keys/microsoft.asc
+      become: true
 
     - name: Add Visual Studio Code repository
       ansible.builtin.yum_repository:
@@ -64,6 +65,7 @@
         gpgcheck: true
         gpgkey: https://packages.microsoft.com/keys/microsoft.asc
         enabled: true
+      become: true
 
     - name: Install Visual Studio Code via rpm-ostree
       ansible.builtin.command:
@@ -71,6 +73,7 @@
       register: vscode_result
       changed_when: vscode_result.rc == 0
       failed_when: false
+      become: true
 
     # ============================================
     # fnm (Fast Node Manager)

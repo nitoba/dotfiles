@@ -24,31 +24,31 @@ install:
 # Run full setup
 setup:
 	@echo "Running full setup playbook..."
-	sudo ./run-setup.sh
+	./run-setup.sh
 
 # Check mode (dry-run)
 check:
 	@echo "Running playbook in check mode..."
-	sudo ansible-playbook -i inventory.ini playbook.yml --check
+	ansible-playbook -i inventory.ini playbook.yml --ask-become-pass --check
 
 dry-run: check
 
 # Verbose mode
 verbose:
 	@echo "Running playbook with verbose output..."
-	sudo ansible-playbook -i inventory.ini playbook.yml -v
+	ansible-playbook -i inventory.ini playbook.yml --ask-become-pass -v
 
 # Setup dotfiles only (example - add tags to playbook first)
 dotfiles:
 	@echo "Setting up dotfiles..."
-	sudo ansible-playbook -i inventory.ini playbook.yml --tags dotfiles
+	ansible-playbook -i inventory.ini playbook.yml --ask-become-pass --tags dotfiles
 
 # Setup Node.js tools only (example - add tags to playbook first)
 nodejs:
 	@echo "Setting up Node.js and package managers..."
-	sudo ansible-playbook -i inventory.ini playbook.yml --tags nodejs
+	ansible-playbook -i inventory.ini playbook.yml --ask-become-pass --tags nodejs
 
 # Install Flatpaks only (example - add tags to playbook first)
 flatpaks:
 	@echo "Installing Flatpak applications..."
-	sudo ansible-playbook -i inventory.ini playbook.yml --tags flatpaks
+	ansible-playbook -i inventory.ini playbook.yml --ask-become-pass --tags flatpaks

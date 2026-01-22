@@ -2,7 +2,6 @@
 
 # Ansible Setup Script for Fedora Bluefin
 # This script configures a new Fedora Bluefin machine with development tools
-# NOTE: This script must be run with sudo privileges
 
 set -e
 
@@ -32,17 +31,6 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
-# Check if running as root or with sudo
-check_privileges() {
-    if [[ $EUID -ne 0 ]]; then
-        log_error "This script must be run with sudo privileges."
-        echo ""
-        log_info "Please run:"
-        echo "  sudo $0"
-        exit 1
-    fi
-}
-
 # Check if running on Fedora Bluefin
 check_os() {
     log_info "Checking operating system..."
@@ -70,7 +58,7 @@ check_requirements() {
 
     if ! command -v ansible-playbook &> /dev/null; then
         log_warning "Ansible not found. Installing via pip..."
-        pip3 install ansible
+        pip3 install ansible --user
     fi
 
     if ! command -v git &> /dev/null; then
@@ -85,8 +73,7 @@ check_requirements() {
 install_collections() {
     if [[ -f "$ANSIBLE_DIR/requirements.yml" ]]; then
         log_info "Installing Ansible collections..."
-        sudo -u "$SUDO_USER" ansible-galaxy collection install -r "$ANSIBLE_DIR/requirements.yml" 2>/dev/null || \
-        ansible-galaxy collection install -r "$ANSIBLE_DIR/requirements.yml" || log_warning "Failed to install some collections"
+        ansible-galaxy collection install -r "$ANSIBLE_DIR/requirements.yml" 2>/dev/null || log_warning "Skipping collections install"
     fi
 }
 
@@ -98,6 +85,7 @@ run_playbook() {
     ansible-playbook \
         -i inventory.ini \
         playbook.yml \
+        --ask-become-pass \
         --extra-vars "dotfiles_dest=$DOTFILES_DIR" \
         "$@"
 }
@@ -111,7 +99,6 @@ main() {
     echo "╚══════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 
-    check_privileges
     check_os
     check_requirements
     install_collections

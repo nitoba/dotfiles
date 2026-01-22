@@ -14,14 +14,14 @@ Este playbook Ansible configura automaticamente um ambiente de desenvolvimento c
 
 ```bash
 cd ~/.ansible
-sudo ./run-setup.sh
+./run-setup.sh
 ```
 
 ### Opção 2: Executar diretamente com Ansible
 
 ```bash
 cd ~/.ansible
-sudo ansible-playbook -i inventory.ini playbook.yml
+ansible-playbook -i inventory.ini playbook.yml --ask-become-pass
 ```
 
 ## O que será instalado
