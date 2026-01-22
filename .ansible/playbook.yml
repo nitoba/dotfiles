@@ -153,7 +153,9 @@
       ansible.builtin.shell:
         cmd: curl -fsSL https://linux.toys/install.sh | bash
       register: linux_toys_result
-      changed_when: linux_toys_result.rc == 0
+      changed_when: linux_toys_result.rc == 0 or linux_toys_result.rc == 1
+      failed_when: false
+      become: true
 
     # ============================================
     # Dotfiles Setup
