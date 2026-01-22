@@ -1,0 +1,12 @@
+---
+# Ansible Galaxy Collections and Roles Requirements
+# Run with: ansible-galaxy collection install -r requirements.yml
+
+collections:
+  # Add community collections if needed
+  # - name: community.general
+
+roles:
+  # Add external roles if needed
+  # - name: geerlingguy.docker
+  #   src: https://github.com/geerlingguy/ansible-role-docker.git

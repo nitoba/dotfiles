@@ -1,0 +1,219 @@
+---
+- name: Configure Fedora Bluefin Development Environment
+  hosts: localhost
+  connection: local
+  become: true
+  vars:
+    dotfiles_repo: "https://github.com/nitoba/dotfiles.git"
+    dotfiles_branch: "bluefin"
+    dotfiles_dest: "{{ ansible_env.HOME }}/dotfiles"
+    fnm_dir: "{{ ansible_env.HOME }}/.local/share/fnm"
+    flatpak_apps:
+      - com.discordapp.Discord
+      - io.dbeaver.DBeaverCommunity
+      - net.loungebrowser.Zen
+      - com.obsproject.Studio
+      - org.wezfurlong.wezterm
+
+  tasks:
+    - name: Display system information
+      ansible.builtin.debug:
+        msg: "Configuring {{ ansible_distribution }} {{ ansible_distribution_version }} for development"
+
+    # ============================================
+    # RPM/Fusion Setup
+    # ============================================
+    - name: Enable RPM Fusion repositories
+      ansible.builtin.command:
+        cmd: rpm-ostree install --uninstall --id=rpmfusion-free-release --id=rpmfusion-nonfree-release
+      register: rpmfusion_result
+      changed_when: rpmfusion_result.rc == 0
+      failed_when: false
+
+    # ============================================
+    # Homebrew CLI Tools
+    # ============================================
+    - name: Install CLI tools via Homebrew
+      ansible.builtin.command:
+        cmd: brew install {{ item }}
+      loop:
+        - stow
+        - zoxide
+        - eza
+        - fzf
+        - bat
+        - gh
+      register: brew_result
+      changed_when: "'is already installed' not in brew_result.stderr and brew_result.rc != 0"
+      failed_when: false
+
+    # ============================================
+    # Visual Studio Code (RPM)
+    # ============================================
+    - name: Add Microsoft GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://packages.microsoft.com/keys/microsoft.asc
+      become: true
+
+    - name: Add Visual Studio Code repository
+      ansible.builtin.yum_repository:
+        name: vscode
+        description: Visual Studio Code
+        baseurl: https://packages.microsoft.com/yumrepos/vscode
+        gpgcheck: true
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+        enabled: true
+      become: true
+
+    - name: Install Visual Studio Code via rpm-ostree
+      ansible.builtin.command:
+        cmd: rpm-ostree install code
+      register: vscode_result
+      changed_when: vscode_result.rc == 0
+      failed_when: false
+      become: true
+
+    # ============================================
+    # fnm (Fast Node Manager)
+    # ============================================
+    - name: Install fnm via Homebrew
+      ansible.builtin.command:
+        cmd: brew install fnm
+      register: fnm_brew_result
+      changed_when: "'is already installed' not in fnm_brew_result.stderr and fnm_brew_result.rc != 0"
+      failed_when: false
+
+    # ============================================
+    # Node.js and Package Managers
+    # ============================================
+    - name: Install latest LTS Node.js via fnm
+      ansible.builtin.shell: |
+        export PATH="$HOME/.local/share/fnm:$PATH"
+        fnm install --lts
+        fnm use lts-latest
+      args:
+        creates: "$HOME/.local/share/fnm/node-versions"
+      environment:
+        FNM_DIR: "$HOME/.local/share/fnm"
+
+    - name: Install pnpm via corepack
+      ansible.builtin.shell: |
+        export PATH="$HOME/.local/share/fnm:$PATH"
+        corepack enable
+        corepack prepare pnpm@latest --activate
+      environment:
+        FNM_DIR: "$HOME/.local/share/fnm"
+
+    - name: Install Bun
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://bun.sh/install | bash
+      args:
+        creates: "{{ ansible_env.HOME }}/.bun/bin/bun"
+
+    # ============================================
+    # OpenCode (via Bun)
+    # ============================================
+    - name: Install OpenCode via Bun
+      ansible.builtin.shell: |
+        export PATH="{{ ansible_env.HOME }}/.bun/bin:$PATH"
+        bun add -g opencode-ai
+      args:
+        creates: "{{ ansible_env.HOME }}/.bun/bin/opencode"
+      environment:
+        BUN_INSTALL: "{{ ansible_env.HOME }}/.bun"
+
+    # ============================================
+    # Claude Code
+    # ============================================
+    - name: Install Claude Code via official installer
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://claude.ai/install.sh | bash
+      register: claude_result
+      changed_when: claude_result.rc == 0
+
+    # ============================================
+    # Flatpak Applications
+    # ============================================
+    - name: Ensure Flathub is added
+      ansible.builtin.command:
+        cmd: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+      register: flathub_result
+      changed_when: flathub_result.rc == 0
+
+    - name: Install Flatpak applications
+      ansible.builtin.command:
+        cmd: "flatpak install -y flathub {{ item }}"
+      loop: "{{ flatpak_apps }}"
+      register: flatpak_result
+      changed_when: flatpak_result.rc == 0
+
+    # ============================================
+    # Linux Toys
+    # ============================================
+    - name: Install Linux Toys
+      ansible.builtin.shell:
+        cmd: curl -fsSL https://linux.toys/install.sh | bash
+      register: linux_toys_result
+      changed_when: linux_toys_result.rc == 0
+
+    # ============================================
+    # Dotfiles Setup
+    # ============================================
+    - name: Clone dotfiles repository
+      ansible.builtin.git:
+        repo: "{{ dotfiles_repo }}"
+        dest: "{{ dotfiles_dest }}"
+        version: "{{ dotfiles_branch }}"
+        force: true
+
+    - name: Create backup directory for existing dotfiles
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.dotfiles-backup"
+        state: directory
+        mode: '0755'
+
+    - name: Backup existing config files
+      ansible.builtin.shell:
+        cmd: |
+          for file in $(stow -n -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} .* 2>&1 | grep 'existing' | awk '{print $3}'); do
+            mv "{{ ansible_env.HOME }}/$(basename $file)" "{{ ansible_env.HOME }}/.dotfiles-backup/" 2>/dev/null || true
+          done
+      failed_when: false
+      args:
+        chdir: "{{ dotfiles_dest }}"
+
+    - name: Stow dotfiles
+      ansible.builtin.command:
+        cmd: stow -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} .
+      args:
+        chdir: "{{ dotfiles_dest }}"
+
+    # ============================================
+    # Post-installation message
+    # ============================================
+    - name: Display completion message
+      ansible.builtin.debug:
+        msg:
+          - "============================================"
+          - "Development environment setup complete!"
+          - "============================================"
+          - ""
+          - "Please reboot your system to apply all changes:"
+          - "  systemctl reboot"
+          - ""
+          - "After reboot, verify installations:"
+          - "  - Node.js: node --version"
+          - "  - pnpm: pnpm --version"
+          - "  - Bun: bun --version"
+          - "  - fnm: fnm --version"
+          - "  - Claude Code: claude --version"
+          - "  - OpenCode: opencode --version"
+          - "  - zoxide: z --version"
+          - "  - eza: eza --version"
+          - "  - fzf: fzf --version"
+          - "  - bat: bat --version"
+          - "  - GitHub CLI: gh --version"
+          - ""
+          - "Dotfiles have been linked using GNU Stow."
+          - "============================================"
