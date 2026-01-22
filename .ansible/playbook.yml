@@ -2,6 +2,7 @@
 - name: Configure Fedora Bluefin Development Environment
   hosts: localhost
   connection: local
+  # become is handled per-task, not globally
   vars:
     dotfiles_repo: "https://github.com/nitoba/dotfiles.git"
     dotfiles_branch: "bluefin"
@@ -10,7 +11,7 @@
     flatpak_apps:
       - com.discordapp.Discord
       - io.dbeaver.DBeaverCommunity
-      - net.loungebrowser.Zen
+      - app.zen_browser.zen
       - com.obsproject.Studio
       - org.wezfurlong.wezterm
       - com.obsproject.Studio.Plugin.BackgroundRemoval
@@ -18,7 +19,7 @@
   tasks:
     - name: Display system information
       ansible.builtin.debug:
-        msg: "Configuring {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }} for development"
+        msg: "Configuring {{ ansible_distribution }} {{ ansible_distribution_version }} for development"
 
     # ============================================
     # RPM/Fusion Setup
@@ -29,7 +30,6 @@
       register: rpmfusion_result
       changed_when: rpmfusion_result.rc == 0
       failed_when: false
-      become: true
 
     # ============================================
     # Homebrew CLI Tools
@@ -51,6 +51,12 @@
     # ============================================
     # Visual Studio Code (RPM)
     # ============================================
+    - name: Add Microsoft GPG key
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://packages.microsoft.com/keys/microsoft.asc
+      become: true
+
     - name: Add Visual Studio Code repository
       ansible.builtin.yum_repository:
         name: vscode
@@ -60,7 +66,6 @@
         gpgkey: https://packages.microsoft.com/keys/microsoft.asc
         enabled: true
       become: true
-      failed_when: false
 
     - name: Install Visual Studio Code via rpm-ostree
       ansible.builtin.command:
@@ -86,9 +91,8 @@
     - name: Install latest LTS Node.js via fnm
       ansible.builtin.shell: |
         export PATH="$HOME/.local/share/fnm:$PATH"
-        eval "$(fnm env --shell=bash)"
         fnm install --lts
-        fnm alias lts-latest default
+        fnm use lts-latest
       args:
         creates: "$HOME/.local/share/fnm/node-versions"
       environment:
@@ -97,9 +101,8 @@
     - name: Install pnpm via corepack
       ansible.builtin.shell: |
         export PATH="$HOME/.local/share/fnm:$PATH"
-        eval "$(fnm env --shell=bash)"
-        fnm exec --using=lts-latest corepack enable
-        fnm exec --using=lts-latest corepack prepare pnpm@latest --activate
+        corepack enable
+        corepack prepare pnpm@latest --activate
       environment:
         FNM_DIR: "$HOME/.local/share/fnm"
 
