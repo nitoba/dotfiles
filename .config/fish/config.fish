@@ -29,7 +29,6 @@ if status is-interactive
     # ----------------------------------
     # Variáveis de ambiente
     # ----------------------------------
-    set --export NPM_TOKEN "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"
     set --export OLLAMA_HOST "0.0.0.0"
     set --export CUDA_VISIBLE_DEVICES "0,1,2,3"
 
