@@ -98,8 +98,8 @@
       ansible.builtin.shell: |
         export PATH="$HOME/.local/share/fnm:$PATH"
         eval "$(fnm env --shell=bash)"
-        corepack enable
-        corepack prepare pnpm@latest --activate
+        fnm exec --using=lts-latest corepack enable
+        fnm exec --using=lts-latest corepack prepare pnpm@latest --activate
       environment:
         FNM_DIR: "$HOME/.local/share/fnm"
 
