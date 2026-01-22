@@ -165,6 +165,12 @@
         version: "{{ dotfiles_branch }}"
         force: true
 
+    - name: Remove existing stow links to avoid conflicts
+      ansible.builtin.shell: |
+        cd {{ dotfiles_dest }}
+        stow -D -t {{ ansible_env.HOME }} . 2>/dev/null || true
+      failed_when: false
+
     - name: Create backup directory for existing dotfiles
       ansible.builtin.file:
         path: "{{ ansible_env.HOME }}/.dotfiles-backup"
