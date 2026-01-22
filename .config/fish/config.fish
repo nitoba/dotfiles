@@ -63,5 +63,6 @@ if status is-interactive
     alias cat 'batcat --color=always'
     alias cd 'z'
     alias standup "cd /home/nitoba/.standup; ./standup-linux"
+    alias pr "/home/nitoba/Documents/repos/pr/run.sh"
 end
 
