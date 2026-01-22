@@ -167,31 +167,13 @@
         version: "{{ dotfiles_branch }}"
         force: true
 
-    - name: Remove existing stow links to avoid conflicts
-      ansible.builtin.shell: |
-        cd {{ dotfiles_dest }}
-        stow -D -t {{ ansible_env.HOME }} . 2>/dev/null || true
-      failed_when: false
-
-    - name: Create backup directory for existing dotfiles
-      ansible.builtin.file:
-        path: "{{ ansible_env.HOME }}/.dotfiles-backup"
-        state: directory
-        mode: '0755'
-
-    - name: Backup existing config files
-      ansible.builtin.shell:
-        cmd: |
-          for file in $(stow -n -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} .* 2>&1 | grep 'existing' | awk '{print $3}'); do
-            mv "{{ ansible_env.HOME }}/$(basename $file)" "{{ ansible_env.HOME }}/.dotfiles-backup/" 2>/dev/null || true
-          done
-      failed_when: false
-      args:
-        chdir: "{{ dotfiles_dest }}"
-
-    - name: Stow dotfiles
+    - name: Stow dotfiles packages
       ansible.builtin.command:
-        cmd: stow -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} .
+        cmd: stow -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} {{ item }}
+      loop:
+        - fish
+        - starship
+        - wezterm
       args:
         chdir: "{{ dotfiles_dest }}"
 
