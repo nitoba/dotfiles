@@ -2,6 +2,7 @@
 
 # Ansible Setup Script for Fedora Bluefin
 # This script configures a new Fedora Bluefin machine with development tools
+# NOTE: This script must be run with sudo privileges
 
 set -e
 
@@ -31,6 +32,17 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# Check if running as root or with sudo
+check_privileges() {
+    if [[ $EUID -ne 0 ]]; then
+        log_error "This script must be run with sudo privileges."
+        echo ""
+        log_info "Please run:"
+        echo "  sudo $0"
+        exit 1
+    fi
+}
+
 # Check if running on Fedora Bluefin
 check_os() {
     log_info "Checking operating system..."
@@ -42,7 +54,7 @@ check_os() {
     source /etc/os-release
     log_info "Detected: $PRETTY_NAME"
 
-    if [[ "$ID" != "fedora" ]]; then
+    if [[ "$ID" != "fedora" ]] && [[ "$ID" != "bluefin" ]]; then
         log_warning "This playbook is designed for Fedora Bluefin/Silverblue"
         read -p "Continue anyway? (y/N) " -n 1 -r
         echo
@@ -58,7 +70,7 @@ check_requirements() {
 
     if ! command -v ansible-playbook &> /dev/null; then
         log_warning "Ansible not found. Installing via pip..."
-        pip3 install ansible --user
+        pip3 install ansible
     fi
 
     if ! command -v git &> /dev/null; then
@@ -73,6 +85,7 @@ check_requirements() {
 install_collections() {
     if [[ -f "$ANSIBLE_DIR/requirements.yml" ]]; then
         log_info "Installing Ansible collections..."
+        sudo -u "$SUDO_USER" ansible-galaxy collection install -r "$ANSIBLE_DIR/requirements.yml" 2>/dev/null || \
         ansible-galaxy collection install -r "$ANSIBLE_DIR/requirements.yml" || log_warning "Failed to install some collections"
     fi
 }
@@ -98,16 +111,10 @@ main() {
     echo "╚══════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
 
+    check_privileges
     check_os
     check_requirements
     install_collections
-
-    # Ask for sudo password upfront
-    log_info "This playbook requires sudo privileges for some tasks."
-    sudo -v
-
-    # Keep sudo alive
-    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
     run_playbook "$@"
 
