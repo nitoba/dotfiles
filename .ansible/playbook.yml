@@ -51,12 +51,6 @@
     # ============================================
     # Visual Studio Code (RPM)
     # ============================================
-    - name: Add Microsoft GPG key
-      ansible.builtin.rpm_key:
-        state: present
-        key: https://packages.microsoft.com/keys/microsoft.asc
-      become: true
-
     - name: Add Visual Studio Code repository
       ansible.builtin.yum_repository:
         name: vscode
@@ -66,6 +60,7 @@
         gpgkey: https://packages.microsoft.com/keys/microsoft.asc
         enabled: true
       become: true
+      failed_when: false
 
     - name: Install Visual Studio Code via rpm-ostree
       ansible.builtin.command:
