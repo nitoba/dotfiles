@@ -6,7 +6,7 @@
 set -e
 
 ANSIBLE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DOTFILES_DIR="$(dirname "$ANSIBLE_DIR")"
+DOTFILES_DIR="$HOME/dotfiles"
 
 # Colors for output
 RED='\033[0;31m'
