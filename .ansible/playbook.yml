@@ -86,8 +86,9 @@
     - name: Install latest LTS Node.js via fnm
       ansible.builtin.shell: |
         export PATH="$HOME/.local/share/fnm:$PATH"
+        eval "$(fnm env --shell=bash)"
         fnm install --lts
-        fnm use lts-latest
+        fnm alias lts-latest default
       args:
         creates: "$HOME/.local/share/fnm/node-versions"
       environment:
@@ -96,6 +97,7 @@
     - name: Install pnpm via corepack
       ansible.builtin.shell: |
         export PATH="$HOME/.local/share/fnm:$PATH"
+        eval "$(fnm env --shell=bash)"
         corepack enable
         corepack prepare pnpm@latest --activate
       environment:
