@@ -169,7 +169,7 @@
 
     - name: Stow dotfiles packages
       ansible.builtin.command:
-        cmd: stow -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} {{ item }}
+        cmd: stow --adopt -d {{ dotfiles_dest }} -t {{ ansible_env.HOME }} {{ item }}
       loop:
         - fish
         - starship
