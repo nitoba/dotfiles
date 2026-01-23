@@ -11,11 +11,13 @@ if status is-interactive
     # set -Ua fish_user_paths $HOME/.cargo/bin
     set -x PATH $PATH /opt/nvim-linux64/bin
     set -Ua fish_user_paths $HOME/.opencode/bin
+    export PATH="$HOME/.local/bin:$PATH"
 
     # Bun, FNM
     set --export BUN_INSTALL "$HOME/.bun"
     set --export PATH $BUN_INSTALL/bin $PATH
     set -x PATH $PATH $HOME/.local/share/fnm
+    
 
     # PNPM
     set -gx PNPM_HOME "$HOME/.local/share/pnpm"
@@ -62,6 +64,7 @@ if status is-interactive
     alias cat 'batcat --color=always'
     alias cd 'z'
     alias standup "cd /home/nitoba/.standup; ./standup-linux"
-    alias pr "/home/nitoba/Documents/repos/pr/run.sh"
+    alias pr "/home/nitoba/Documents/repos/ibs/tools/pr/run.sh"
 end
+
 
